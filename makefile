@@ -10,6 +10,7 @@ all: $(SRC) $(EXE)
 
 $(EXE): $(OBJ)
 	$(CXX) $(LDFLAGS) $(OBJ) -o $@
+	make install
 
 .cpp.o:
 	$(CXX) $(CCFLAGS) $< -o $@
