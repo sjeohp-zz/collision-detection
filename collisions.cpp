@@ -71,20 +71,16 @@ void Collidable::setNormals(uint nvert, float* vertx, float* verty) {
 }
 
 // Rotate vertices and normals
-void Collidable::transformVertices(glm::vec2 position, float angle)
+void Collidable::rotateVertices(glm::vec2 position, float angle)
 {
     if (isCircle()) { return; }
     float r = angle;
     float sinr = sinf(r);
     float cosr = cosf(r);
-    float x = position.x;
-    float y = position.y;
-    float a;
     float* vx = (float*)calloc(nvert_, sizeof(float));
     float* vy = (float*)calloc(nvert_, sizeof(float));
     for (int i = 0; i < nvert_; ++i){
 		glm::vec2 s = glm::vec2(vertx_[i], verty_[i]) - position;
-		// glm::vec2 v = position + glm::rotate(s, angle);
         vx[i] = position.x + (s.x * cosr - s.y * sinr);
         vy[i] = position.y + (s.x * sinr + s.y * cosr);
     }
@@ -282,7 +278,6 @@ uint dist_circ_circ(float ax, float ay, float bx, float by)
 Quadtree::Quadtree(float* vertx, float* verty, uint depth)
 : vertx_(vertx), verty_(verty)
 {        
-	// std::cout << "QT depth " << depth << ", (" << vertx_[0] << ", " << verty_[0] << ") -> (" << vertx_[2] << ", " << verty_[2] << ")" << std::endl;
     if (depth > 0){			
 		quads_ = std::vector<Quadtree>(4);
 							
@@ -427,9 +422,6 @@ void Quadtree::possibleCollision(Collidable* item_a, Collidable* item_b)
 		glm::vec2 support_point_b;
 		float d1 = penetration(item_a, item_b, &face_index_a, &support_point_a);
 		float d2 = penetration(item_b, item_a, &face_index_b, &support_point_b);
-		
-		// std::cout << "Penetration 1: " << d1 << std::endl;
-// 		std::cout << "Penetration 2: " << d2 << std::endl;
 		
 		if (d1 < 0 && d2 < 0) {
 			if (d1 > d2) {

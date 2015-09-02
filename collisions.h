@@ -42,7 +42,7 @@ public:
 	Collidable(float x, float y, uint radius) : isCircle_(true), centrex_(x), centrey_(y), radius_(radius) {}
 	Collidable(uint nvert, float* vertx, float* verty);
 	Collidable(float x, float y, float w, float h);
-	void transformVertices(glm::vec2 position, float angle);
+	void rotateVertices(glm::vec2 position, float angle);
 	int type() const { return type_; }
 	void setType(int type) { type_ = type; }
 	bool isCircle() const { return isCircle_; }
@@ -65,16 +65,19 @@ private:
 	float* vertx_;
 	float* verty_;
 	std::vector<Collidable*> items_;
-public:
-	Quadtree() {}
-	Quadtree(float* vertx, float* verty, uint depth);
+	
+protected:
 	float* vertx() const;
 	float* verty() const;
 	std::vector<Collidable*> items() const;
 	std::vector<Quadtree> quads() const;
+	void possibleCollision(Collidable* item_a, Collidable* item_b);
+	
+public:
+	Quadtree() {}
+	Quadtree(float* vertx, float* verty, uint depth);
 	void clear();
 	void insert(Collidable* item);
-	void possibleCollision(Collidable* item_a, Collidable* item_b);
 	std::vector<Collidable*> checkCollisions();
 };
 
